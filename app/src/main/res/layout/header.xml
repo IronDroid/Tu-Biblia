@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
-    android:textColor="@android:color/white"
+    android:elevation="4dp"
     android:minHeight="32dp"
-    android:padding="@dimen/activity_horizontal_margin" />
+    android:padding="@dimen/activity_horizontal_margin"
+    android:textColor="@android:color/white" />
 

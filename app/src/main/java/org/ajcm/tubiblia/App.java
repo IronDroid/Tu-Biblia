@@ -22,7 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SystemClock.sleep(1000);
+        SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
         DBAdapter dbAdapter = new DBAdapter(this);
         if (!UserPreferences.getBoolean(this, App.COPY_DB)) {
             try {
