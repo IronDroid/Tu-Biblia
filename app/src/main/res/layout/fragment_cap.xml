@@ -11,15 +11,26 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin"
-        android:textColor="@android:color/black"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="123"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin"
+        android:layout_weight="1"
+        android:text="1234124lq j a l k j dhglkahg lkajdh glkashdflkashdlkjasd"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageView
+        android:id="@+id/verse_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_more_vert_black_24dp" />
 </LinearLayout>

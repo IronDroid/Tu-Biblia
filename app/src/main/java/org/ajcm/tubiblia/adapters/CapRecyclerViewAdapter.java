@@ -1,10 +1,15 @@
 package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +20,7 @@ import java.util.ArrayList;
 
 public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "CapRecyclerViewAdapter";
     private final ArrayList<Verse> mValues;
     private Context context;
 
@@ -34,6 +40,22 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mIdView.setText(mValues.get(position).getVerse()+ "");
         holder.mContentView.setText(mValues.get(position).getText());
+        holder.verseMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "click menu", Toast.LENGTH_SHORT).show();
+                PopupMenu popupMenu = new PopupMenu(context, view);
+                popupMenu.inflate(R.menu.verse_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +79,14 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public final ImageView verseMenu;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            verseMenu = (ImageView) view.findViewById(R.id.verse_menu);
         }
 
         @Override
