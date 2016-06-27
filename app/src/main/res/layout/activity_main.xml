@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?actionBarSize"
     android:orientation="vertical"
     tools:context=".activities.MainActivity">
-
-    <include layout="@layout/toolbar" />
 
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/list"
