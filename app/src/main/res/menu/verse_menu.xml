@@ -3,9 +3,9 @@
     <item
         android:id="@+id/fav"
         android:icon="@android:drawable/ic_btn_speak_now"
-        android:title="Marcar como Favorito" />
+        android:title="@string/add_note" />
     <item
         android:id="@+id/no_fav"
         android:icon="@android:drawable/ic_btn_speak_now"
-        android:title="Desmarcar como Favorito" />
+        android:title="@string/bookmark" />
 </menu>

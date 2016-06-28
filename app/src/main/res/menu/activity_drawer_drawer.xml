@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_1"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_more_vert_black_24dp"
-            android:title="Import" />
+            android:id="@+id/nav_book"
+            android:checked="true"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="Libros" />
+        <item
+            android:id="@+id/nav_fav"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="Favoritos" />
+        <item
+            android:id="@+id/nav_note"
+            android:icon="@drawable/ic_note_black_24dp"
+            android:title="Notas" />
     </group>
-
-    <item android:title="Communicate">
+    <item android:title="Sé social">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_more_vert_black_24dp"
-                android:title="Share" />
+                android:icon="@drawable/ic_share_black_24dp"
+                android:title="Compartir" />
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/ic_star_black_24dp"
+                android:title="Calificar" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info_black_24dp"
+                android:title="Acerca de..." />
         </menu>
     </item>
 </menu>

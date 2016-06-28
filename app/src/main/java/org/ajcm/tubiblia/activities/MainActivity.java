@@ -1,25 +1,20 @@
 package org.ajcm.tubiblia.activities;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.ajcm.tubiblia.R;
-import org.ajcm.tubiblia.adapters.StickyListAdapter;
-import org.ajcm.tubiblia.dataset.DBAdapter;
-import org.ajcm.tubiblia.models.Book;
-
-import java.util.ArrayList;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+import org.ajcm.tubiblia.fragments.BookFragment;
+import org.ajcm.tubiblia.fragments.NoteFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,22 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        initGUI();
-    }
-
-    private void initGUI() {
-        StickyListHeadersListView stickyList = (StickyListHeadersListView) findViewById(R.id.list);
-        DBAdapter dbAdapter = new DBAdapter(this);
-        dbAdapter.open();
-        Cursor allBooks = dbAdapter.getAllBooks();
-        ArrayList<Book> books = new ArrayList<>();
-        while (allBooks.moveToNext()) {
-            books.add(Book.fromCursor(allBooks));
-        }
-        StickyListAdapter adapter = new StickyListAdapter(this, books);
-        dbAdapter.close();
-        allBooks.close();
-        stickyList.setAdapter(adapter);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content, new BookFragment()).commit();
     }
 
     @Override
@@ -80,14 +61,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = null;
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_share) {
-
+        switch (item.getItemId()){
+            case R.id.nav_book:
+                fragmentClass = BookFragment.class;
+                getSupportActionBar().setTitle(R.string.app_name);
+                break;
+            case R.id.nav_note:
+                fragmentClass = NoteFragment.class;
+                getSupportActionBar().setTitle(R.string.title_fragment_note);
+                break;
+            default:
+                fragmentClass = BookFragment.class;
         }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
