@@ -46,13 +46,17 @@ public class DBAdapter {
                 Verse.Columns.id_libro.name() + " = " + idBook + " AND " + Verse.Columns.capitulo.name() + " = " + idCap, null, null, null, null, null);
     }
 
-    public long addFav(int libro, int capitulo, int versiculo, String letra) {
+    public long addFav(int idBook, int chapter, int verse, boolean favState) {
         ContentValues values = new ContentValues();
-//        values.put(ColussmnVersicule.favorito.name(), num);
-        return db.update(DATABASE_TABLE_VERSICULE, values, "", null);
+        values.put(Verse.Columns.favorito.name(), favState);
+        open();
+        return db.update(DATABASE_TABLE_VERSICULE, values,
+                Verse.Columns.id_libro.name() + " = " + idBook + " AND " +
+                        Verse.Columns.capitulo.name() + " = " + chapter + " AND " +
+                        Verse.Columns.versiculo.name() + " = " + verse, null);
     }
 
-    public Cursor getAllFav(){
+    public Cursor getAllFav() {
         open();
         return db.query(DATABASE_TABLE_VERSICULE, null, Verse.Columns.favorito + " = 1", null, null, null, null);
     }

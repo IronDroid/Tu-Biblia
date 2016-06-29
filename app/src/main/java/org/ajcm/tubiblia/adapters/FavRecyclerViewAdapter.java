@@ -38,7 +38,7 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
         DBAdapter dbAdapter = new DBAdapter(context);
         Cursor cursor = dbAdapter.getBook(mValues.get(position).getIdBook());
         Book book = Book.fromCursor(cursor);
-        holder.mIdView.setText(book.getNameBook() + " " + mValues.get(position).getChapter() + " " + mValues.get(position).getVerse());
+        holder.mIdView.setText(book.getNameBook() + " " + mValues.get(position).getChapter() + ":" + mValues.get(position).getVerse());
         holder.mContentView.setText(mValues.get(position).getText());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

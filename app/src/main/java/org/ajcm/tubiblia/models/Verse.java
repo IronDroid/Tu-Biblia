@@ -67,7 +67,7 @@ public class Verse {
         verse.setChapter(cursor.getInt(Columns.capitulo.ordinal()));
         verse.setVerse(cursor.getInt(Columns.versiculo.ordinal()));
         verse.setText(cursor.getString(Columns.texto.ordinal()));
-        verse.setFav(Boolean.valueOf(cursor.getString(Columns.favorito.ordinal())));
+        verse.setFav(cursor.getInt(Columns.favorito.ordinal()) == 1);
         return verse;
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ajcm.tubiblia.R;
+import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Verse;
 
 import java.util.ArrayList;
@@ -40,18 +40,25 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(mValues.get(position).getVerse() + "");
-        holder.mContentView.setText(mValues.get(position).getText());
+        final int pos = position;
+        final Verse verse = mValues.get(position);
+        holder.mIdView.setText(String.valueOf(verse.getVerse()));
+        holder.mContentView.setText(verse.getText());
         holder.verseMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "click menu", Toast.LENGTH_SHORT).show();
-                PopupMenu popupMenu = new PopupMenu(context, view);
+
+                final PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.inflate(R.menu.verse_menu);
+
+                if (verse.isFav()) {
+                    popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
+                }
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-
+                        menuItemClick(item, verse, pos);
                         return true;
                     }
                 });
@@ -66,16 +73,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             }
         });
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-        mark.setBackgroundColor(Color.YELLOW);
-        holder.layoutMark.addView(mark, params);
-        holder.layoutMark.addView(LayoutInflater.from(context).inflate(R.layout.view_mark, null, true), params);
-        mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-        mark.setBackgroundColor(Color.YELLOW);
-        holder.layoutMark.addView(mark, params);
+        updateUIItem(verse, holder);
     }
 
     @Override
@@ -102,6 +100,33 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
+        }
+    }
+
+    private void menuItemClick(MenuItem item, Verse verse, int pos) {
+        DBAdapter dbAdapter = new DBAdapter(context);
+        switch (item.getItemId()) {
+            case R.id.menu_fav:
+                dbAdapter.addFav(verse.getIdBook(), verse.getChapter(), verse.getVerse(), !verse.isFav());
+                mValues.get(pos).setFav(!mValues.get(pos).isFav());
+                notifyItemChanged(pos);
+                break;
+            case R.id.menu_note:
+                Log.e(TAG, "menuItemClick: nota");
+                break;
+        }
+        dbAdapter.close();
+    }
+
+    private void updateUIItem(Verse verse, ViewHolder holder) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        holder.layoutMark.removeAllViews();
+        if (verse.isFav()) {
+            View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
+            mark.setBackgroundColor(Color.YELLOW);
+            holder.layoutMark.addView(mark, params);
         }
     }
 }

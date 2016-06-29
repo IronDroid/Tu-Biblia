@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/text_margin"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
             android:src="@drawable/ic_more_vert_black_24dp"
@@ -46,7 +45,6 @@
             android:id="@+id/layout_mark"
             android:layout_width="8dp"
             android:layout_height="match_parent"
-            android:background="#12ee12"
             android:orientation="vertical" />
     </LinearLayout>
 

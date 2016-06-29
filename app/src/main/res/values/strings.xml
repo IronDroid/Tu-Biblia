@@ -9,6 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="add_note">Agregar nota</string>
     <string name="bookmark">Marcar como Favorito</string>
+    <string name="unbookmark">Desmarcar Favorito</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
