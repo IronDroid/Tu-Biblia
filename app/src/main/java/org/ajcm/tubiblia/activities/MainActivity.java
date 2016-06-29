@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.fragments.BookFragment;
+import org.ajcm.tubiblia.fragments.FavFragment;
 import org.ajcm.tubiblia.fragments.NoteFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_note:
                 fragmentClass = NoteFragment.class;
                 getSupportActionBar().setTitle(R.string.title_fragment_note);
+                break;
+            case R.id.nav_fav:
+                fragmentClass = FavFragment.class;
+                getSupportActionBar().setTitle(R.string.title_fragment_fav);
                 break;
             default:
                 fragmentClass = BookFragment.class;

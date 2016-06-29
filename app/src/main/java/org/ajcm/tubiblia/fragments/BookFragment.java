@@ -52,7 +52,6 @@ public class BookFragment extends Fragment {
 
         StickyListHeadersListView stickyList = (StickyListHeadersListView) view.findViewById(R.id.list);
         DBAdapter dbAdapter = new DBAdapter(getActivity());
-        dbAdapter.open();
         Cursor allBooks = dbAdapter.getAllBooks();
         ArrayList<Book> books = new ArrayList<>();
         while (allBooks.moveToNext()) {

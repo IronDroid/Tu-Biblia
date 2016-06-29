@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Tu Biblia</string>
     <string name="title_fragment_note">Mis Notas</string>
+    <string name="title_fragment_fav">Mis Favoritos</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

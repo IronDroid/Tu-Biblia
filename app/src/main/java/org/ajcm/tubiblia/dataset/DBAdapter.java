@@ -37,6 +37,7 @@ public class DBAdapter {
     }
 
     public Cursor getAllBooks() {
+        open();
         return db.query(DATABASE_TABLE_BOOK, null, null, null, null, null, null);
     }
 
@@ -51,7 +52,13 @@ public class DBAdapter {
         return db.update(DATABASE_TABLE_VERSICULE, values, "", null);
     }
 
+    public Cursor getAllFav(){
+        open();
+        return db.query(DATABASE_TABLE_VERSICULE, null, Verse.Columns.favorito + " = 1", null, null, null, null);
+    }
+
     public Cursor getBook(long idBook) {
+        open();
         Cursor res = db.query(DATABASE_TABLE_BOOK, null, Book.Columns.id_libro.name() + " = " + idBook, null, null, null, null);
         if (res != null) {
             res.moveToFirst();

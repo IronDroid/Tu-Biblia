@@ -1,6 +1,7 @@
 package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(mValues.get(position).getVerse()+ "");
+        holder.mIdView.setText(mValues.get(position).getVerse() + "");
         holder.mContentView.setText(mValues.get(position).getText());
         holder.verseMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,14 +62,20 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
                 Toast.makeText(context, "LOL!!!  ", Toast.LENGTH_SHORT).show();
             }
         });
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
+        mark.setBackgroundColor(Color.YELLOW);
+        holder.layoutMark.addView(mark, params);
+        holder.layoutMark.addView(LayoutInflater.from(context).inflate(R.layout.view_mark, null, true), params);
+        mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
+        mark.setBackgroundColor(Color.YELLOW);
+        holder.layoutMark.addView(mark, params);
     }
 
     @Override
@@ -80,6 +88,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         public final TextView mIdView;
         public final TextView mContentView;
         public final ImageView verseMenu;
+        public LinearLayout layoutMark;
 
         public ViewHolder(View view) {
             super(view);
@@ -87,6 +96,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
             verseMenu = (ImageView) view.findViewById(R.id.verse_menu);
+            layoutMark = (LinearLayout) view.findViewById(R.id.layout_mark);
         }
 
         @Override
