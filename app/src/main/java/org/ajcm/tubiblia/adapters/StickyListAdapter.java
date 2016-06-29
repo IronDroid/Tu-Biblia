@@ -24,6 +24,8 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
     public static final String ID_BOOK = "idBook";
     public static final String NUM_CAPS = "numCaps";
     public static final String NAME_BOOK = "nameBook";
+    public static final String CHAPTER_BOOK = "chapterBook";
+    public static final String VERSE_BOOK = "verseBook";
     private Context context;
     private ArrayList<Book> booksList;
 

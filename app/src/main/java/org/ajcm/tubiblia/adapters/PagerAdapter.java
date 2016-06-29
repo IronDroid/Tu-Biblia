@@ -13,18 +13,20 @@ import java.util.ArrayList;
  */
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
+    private int verse;
     private int idBook;
     private int numCap;
 
-    public PagerAdapter(FragmentManager fm, int idBook, int numCap) {
+    public PagerAdapter(FragmentManager fm, int idBook, int numCap, int verse) {
         super(fm);
         this.idBook = idBook;
         this.numCap = numCap;
+        this.verse = verse;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return CapFragment.newInstance(idBook, position + 1);
+        return CapFragment.newInstance(idBook, position + 1, verse);
     }
 
     @Override

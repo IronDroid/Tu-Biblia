@@ -1,6 +1,7 @@
 package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.ajcm.tubiblia.R;
+import org.ajcm.tubiblia.activities.BookActivity;
 import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Book;
 import org.ajcm.tubiblia.models.Verse;
@@ -37,13 +39,22 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
         holder.mItem = mValues.get(position);
         DBAdapter dbAdapter = new DBAdapter(context);
         Cursor cursor = dbAdapter.getBook(mValues.get(position).getIdBook());
-        Book book = Book.fromCursor(cursor);
-        holder.mIdView.setText(book.getNameBook() + " " + mValues.get(position).getChapter() + ":" + mValues.get(position).getVerse());
+        final Book book = Book.fromCursor(cursor);
+
+        holder.mIdView.setText(book.getNameBook() + " " + holder.mItem.getChapter() + ":" + holder.mItem.getVerse());
         holder.mContentView.setText(mValues.get(position).getText());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mIdView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, BookActivity.class);
+                intent.putExtra(StickyListAdapter.ID_BOOK, book.getIdBook());
+                intent.putExtra(StickyListAdapter.NUM_CAPS, book.getNumCap());
+                intent.putExtra(StickyListAdapter.NAME_BOOK, book.getNameBook());
+
+                intent.putExtra(StickyListAdapter.CHAPTER_BOOK, holder.mItem.getChapter());
+                intent.putExtra(StickyListAdapter.VERSE_BOOK, holder.mItem.getVerse());
+                context.startActivity(intent);
             }
         });
     }

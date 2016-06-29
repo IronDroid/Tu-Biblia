@@ -125,7 +125,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.layoutMark.removeAllViews();
         if (verse.isFav()) {
             View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-            mark.setBackgroundColor(Color.YELLOW);
+            mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
             holder.layoutMark.addView(mark, params);
         }
     }

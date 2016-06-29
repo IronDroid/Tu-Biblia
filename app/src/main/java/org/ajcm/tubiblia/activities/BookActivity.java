@@ -21,6 +21,8 @@ public class BookActivity extends AppCompatActivity {
     private PagerAdapter adapter;
     private int idBook;
     private int numCap;
+    private int intChapter;
+    private int intVerse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +30,20 @@ public class BookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getIntent().getExtras().getString(StickyListAdapter.NAME_BOOK));
+        Bundle extras = getIntent().getExtras();
+        getSupportActionBar().setTitle(extras.getString(StickyListAdapter.NAME_BOOK));
 
-        idBook = getIntent().getExtras().getInt(StickyListAdapter.ID_BOOK);
-        numCap = getIntent().getExtras().getInt(StickyListAdapter.NUM_CAPS);
+        idBook = extras.getInt(StickyListAdapter.ID_BOOK);
+        numCap = extras.getInt(StickyListAdapter.NUM_CAPS);
+        intChapter = extras.getInt(StickyListAdapter.CHAPTER_BOOK);
+        intVerse = extras.getInt(StickyListAdapter.VERSE_BOOK);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        adapter = new PagerAdapter(getSupportFragmentManager(), idBook, numCap);
+
+        adapter = new PagerAdapter(getSupportFragmentManager(), idBook, numCap, intVerse);
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(intChapter - 1);
         tabLayout.setupWithViewPager(viewPager);
     }
 

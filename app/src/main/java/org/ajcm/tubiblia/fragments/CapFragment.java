@@ -27,15 +27,18 @@ public class CapFragment extends Fragment {
 
     private static final String ARG_CAP = "capitulo";
     private static final String ARG_ID_BOOK = "idBook";
+    private static final String ARG_VERSE = "verse";
     //    private OnListFragmentInteractionListener mListener;
     private int idBook;
     private int idCap;
+    private int verse;
 
-    public static CapFragment newInstance(int idBook, int idCap) {
+    public static CapFragment newInstance(int idBook, int idCap, int verse) {
         CapFragment fragment = new CapFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID_BOOK, idBook);
         args.putInt(ARG_CAP, idCap);
+        args.putInt(ARG_VERSE, verse);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,6 +50,7 @@ public class CapFragment extends Fragment {
         if (getArguments() != null) {
             idBook = getArguments().getInt(ARG_ID_BOOK);
             idCap = getArguments().getInt(ARG_CAP);
+            verse = getArguments().getInt(ARG_VERSE);
         }
     }
 
@@ -59,16 +63,20 @@ public class CapFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            if (verse > 0) {
+                linearLayoutManager.scrollToPosition(verse - 1);
+            }
+            recyclerView.setLayoutManager(linearLayoutManager);
             DBAdapter dbAdapter = new DBAdapter(context);
             dbAdapter.open();
             Cursor capitulo = dbAdapter.getCapitulo(idBook, idCap);
             ArrayList<Verse> versiculos = new ArrayList<>();
-            while (capitulo.moveToNext()){
+            while (capitulo.moveToNext()) {
                 versiculos.add(Verse.fromCursor(capitulo));
             }
             dbAdapter.close();
-            recyclerView.setAdapter(new CapRecyclerViewAdapter(context,versiculos));
+            recyclerView.setAdapter(new CapRecyclerViewAdapter(context, versiculos));
         }
         return view;
     }

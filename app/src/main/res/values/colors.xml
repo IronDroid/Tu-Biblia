@@ -9,4 +9,7 @@
 
     <color name="colorPrimaryDarkDefault">#37474F</color>
     <color name="colorAccentDarkDefault">#2196F3</color>
+
+    <color name="colorFavMark">#FFFF00</color>
+    <color name="colorNoteMark">#448AFF</color>
 </resources>
