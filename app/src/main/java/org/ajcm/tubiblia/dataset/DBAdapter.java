@@ -57,6 +57,16 @@ public class DBAdapter {
                         Verse.Columns.verse.name() + " = " + verse, null);
     }
 
+    public long addNote(int idBook, int chapter, int verse, String note) {
+        ContentValues values = new ContentValues();
+        values.put(Verse.Columns.text_note.name(), note);
+        open();
+        return db.update(DATABASE_TABLE_VERSE, values,
+                Verse.Columns.id_book.name() + " = " + idBook + " AND " +
+                        Verse.Columns.chapter.name() + " = " + chapter + " AND " +
+                        Verse.Columns.verse.name() + " = " + verse, null);
+    }
+
     public Cursor getAllFav() {
         open();
         return db.query(DATABASE_TABLE_VERSE, null, Verse.Columns.favorite + " = 1", null, null, null, null);

@@ -2,7 +2,7 @@ package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +47,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         final Verse verse = mValues.get(position);
         holder.mIdView.setText(String.valueOf(verse.getVerse()));
         holder.mContentView.setText(verse.getText());
+        final boolean hasNote = verse.getTextNote().length() > 0;
         holder.verseMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,14 +59,14 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                     popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
                 }
 
-//                if (verse.hasNote()){
-//                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
-//                }
+                if (hasNote) {
+                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
+                }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        menuItemClick(item, verse, pos);
+                        menuItemClick(item, verse, pos, hasNote);
                         return true;
                     }
                 });
@@ -80,7 +81,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             }
         });
 
-        updateUIItem(verse, holder);
+        updateUIItem(verse, holder, hasNote);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         }
     }
 
-    private void menuItemClick(MenuItem item, Verse verse, int pos) {
+    private void menuItemClick(MenuItem item, Verse verse, int pos, boolean hasNote) {
         DBAdapter dbAdapter = new DBAdapter(context);
         switch (item.getItemId()) {
             case R.id.menu_fav:
@@ -120,14 +121,17 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 break;
             case R.id.menu_note:
                 Log.e(TAG, "menuItemClick: nota");
-                showDialogNote(verse);
-                notifyItemChanged(pos);
+                if (hasNote) {
+                    showDialogNoteText(verse, pos);
+                } else {
+                    showDialogNote(verse, pos);
+                }
                 break;
         }
         dbAdapter.close();
     }
 
-    private void updateUIItem(Verse verse, ViewHolder holder) {
+    private void updateUIItem(Verse verse, ViewHolder holder, boolean hasNote) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
@@ -137,24 +141,48 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
             holder.layoutMark.addView(mark, params);
         }
-//        if (verse.hasNote()){
-//            View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-//            mark.setBackgroundColor(context.getResources().getColor(R.color.colorNoteMark));
-//            holder.layoutMark.addView(mark, params);
-//        }
+        if (hasNote) {
+            View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
+            mark.setBackgroundColor(context.getResources().getColor(R.color.colorNoteMark));
+            holder.layoutMark.addView(mark, params);
+        }
     }
 
-    private void showDialogNote(final Verse verse) {
+    private void showDialogNote(final Verse verse, final int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Agregar Nota");
-        final EditText et = new EditText(context);
-        builder.setView(et);
+
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_note, null);
+        final EditText et = (EditText) layout.findViewById(R.id.edittext_note);
+        builder.setView(layout);
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.e(TAG, "onClick: text " + et.getText());
-                Log.e(TAG, "onClick: verse" + verse.getChapter() + ":" + verse.getVerse());
-                // guardar nota en DB
+                if (!et.getText().toString().isEmpty()) {
+                    Log.e(TAG, "onClick: text " + et.getText());
+                    Log.e(TAG, "onClick: verse" + verse.getChapter() + ":" + verse.getVerse());
+                    // guardar nota en DB
+                    DBAdapter dbAdapter = new DBAdapter(context);
+                    dbAdapter.addNote(verse.getIdBook(), verse.getChapter(), verse.getVerse(), et.getText().toString());
+                    dbAdapter.close();
+
+                    mValues.get(pos).setTextNote(et.getText().toString());
+                    // actualizar el view
+                    notifyItemChanged(pos);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
+
+    private void showDialogNoteText(final Verse verse, final int pos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Agregar Nota");
+        builder.setMessage(verse.getTextNote());
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
         builder.setNegativeButton("Cancelar", null);

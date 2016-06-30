@@ -13,6 +13,7 @@ public class Verse {
     private int verse;
     private String text;
     private boolean fav;
+    private String textNote;
 
     public enum Columns {
         _id,
@@ -20,7 +21,8 @@ public class Verse {
         chapter,
         verse,
         text_verse,
-        favorite
+        favorite,
+        text_note
     }
 
     public int getIdBook() {
@@ -71,6 +73,14 @@ public class Verse {
         this._id = _id;
     }
 
+    public String getTextNote() {
+        return textNote;
+    }
+
+    public void setTextNote(String textNote) {
+        this.textNote = textNote;
+    }
+
     public static Verse fromCursor(Cursor cursor) {
         Verse verse = new Verse();
         verse.set_id(cursor.getInt(Columns._id.ordinal()));
@@ -79,6 +89,7 @@ public class Verse {
         verse.setVerse(cursor.getInt(Columns.verse.ordinal()));
         verse.setText(cursor.getString(Columns.text_verse.ordinal()));
         verse.setFav(cursor.getInt(Columns.favorite.ordinal()) == 1);
+        verse.setTextNote(cursor.getString(Columns.text_note.ordinal()));
         return verse;
     }
 }
