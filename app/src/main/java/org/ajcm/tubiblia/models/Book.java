@@ -8,10 +8,10 @@ import android.database.Cursor;
 public class Book {
     private int idBook;
     private String nameBook;
-    private int numCap;
+    private int numChapter;
 
     public enum Columns {
-        id_libro, nombre, num_cap
+        _id, name, num_chapter
     }
 
     public int getIdBook() {
@@ -30,19 +30,19 @@ public class Book {
         this.nameBook = nameBook;
     }
 
-    public int getNumCap() {
-        return numCap;
+    public int getNumChapter() {
+        return numChapter;
     }
 
-    public void setNumCap(int numCap) {
-        this.numCap = numCap;
+    public void setNumChapter(int numChapter) {
+        this.numChapter = numChapter;
     }
 
     public static Book fromCursor(Cursor cursor){
         Book book = new Book();
-        book.setIdBook(cursor.getInt(Columns.id_libro.ordinal()));
-        book.setNameBook(cursor.getString(Columns.nombre.ordinal()));
-        book.setNumCap(cursor.getInt(Columns.num_cap.ordinal()));
+        book.setIdBook(cursor.getInt(Columns._id.ordinal()));
+        book.setNameBook(cursor.getString(Columns.name.ordinal()));
+        book.setNumChapter(cursor.getInt(Columns.num_chapter.ordinal()));
         return book;
     }
 }

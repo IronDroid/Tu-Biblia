@@ -7,6 +7,7 @@ import android.database.Cursor;
  */
 public class Verse {
 
+    private int _id;
     private int idBook;
     private int chapter;
     private int verse;
@@ -14,11 +15,12 @@ public class Verse {
     private boolean fav;
 
     public enum Columns {
-        favorito,
-        id_libro,
-        capitulo,
-        versiculo,
-        texto
+        _id,
+        id_book,
+        chapter,
+        verse,
+        text_verse,
+        favorite
     }
 
     public int getIdBook() {
@@ -61,13 +63,22 @@ public class Verse {
         this.fav = fav;
     }
 
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
+
     public static Verse fromCursor(Cursor cursor) {
         Verse verse = new Verse();
-        verse.setIdBook(cursor.getInt(Columns.id_libro.ordinal()));
-        verse.setChapter(cursor.getInt(Columns.capitulo.ordinal()));
-        verse.setVerse(cursor.getInt(Columns.versiculo.ordinal()));
-        verse.setText(cursor.getString(Columns.texto.ordinal()));
-        verse.setFav(cursor.getInt(Columns.favorito.ordinal()) == 1);
+        verse.set_id(cursor.getInt(Columns._id.ordinal()));
+        verse.setIdBook(cursor.getInt(Columns.id_book.ordinal()));
+        verse.setChapter(cursor.getInt(Columns.chapter.ordinal()));
+        verse.setVerse(cursor.getInt(Columns.verse.ordinal()));
+        verse.setText(cursor.getString(Columns.text_verse.ordinal()));
+        verse.setFav(cursor.getInt(Columns.favorite.ordinal()) == 1);
         return verse;
     }
 }

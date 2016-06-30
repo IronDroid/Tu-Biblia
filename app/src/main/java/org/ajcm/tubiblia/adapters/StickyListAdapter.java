@@ -94,13 +94,13 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
             vh = (ViewHolder) convertView.getTag();
         }
         vh.nameBook.setText(booksList.get(position).getNameBook());
-        vh.bookInfo.setText(booksList.get(position).getNumCap() + " capitulo(s)");
+        vh.bookInfo.setText(booksList.get(position).getNumChapter() + " capitulo(s)");
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BookActivity.class);
                 intent.putExtra(ID_BOOK, booksList.get(position).getIdBook());
-                intent.putExtra(NUM_CAPS, booksList.get(position).getNumCap());
+                intent.putExtra(NUM_CAPS, booksList.get(position).getNumChapter());
                 intent.putExtra(NAME_BOOK, booksList.get(position).getNameBook());
                 context.startActivity(intent);
             }

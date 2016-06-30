@@ -49,7 +49,7 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
             public void onClick(View v) {
                 Intent intent = new Intent(context, BookActivity.class);
                 intent.putExtra(StickyListAdapter.ID_BOOK, book.getIdBook());
-                intent.putExtra(StickyListAdapter.NUM_CAPS, book.getNumCap());
+                intent.putExtra(StickyListAdapter.NUM_CAPS, book.getNumChapter());
                 intent.putExtra(StickyListAdapter.NAME_BOOK, book.getNameBook());
 
                 intent.putExtra(StickyListAdapter.CHAPTER_BOOK, holder.mItem.getChapter());

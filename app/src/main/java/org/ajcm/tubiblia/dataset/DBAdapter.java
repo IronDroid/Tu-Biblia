@@ -18,8 +18,9 @@ import org.ajcm.tubiblia.utils.UserPreferences;
 public class DBAdapter {
 
     private static final String TAG = "DBAdapter";
-    private static final String DATABASE_TABLE_BOOK = "libro";
-    private static final String DATABASE_TABLE_VERSICULE = "versiculo";
+    private static final String DATABASE_TABLE_BOOK = "book_table";
+    private static final String DATABASE_TABLE_VERSE = "verse_table";
+    private static final String DATABASE_TABLE_NOTE = "note_table";
 
     private DBHelper dbHelper;
     private Context context;
@@ -42,28 +43,28 @@ public class DBAdapter {
     }
 
     public Cursor getCapitulo(int idBook, int idCap) {
-        return db.query(true, DATABASE_TABLE_VERSICULE, null,
-                Verse.Columns.id_libro.name() + " = " + idBook + " AND " + Verse.Columns.capitulo.name() + " = " + idCap, null, null, null, null, null);
+        return db.query(true, DATABASE_TABLE_VERSE, null,
+                Verse.Columns.id_book.name() + " = " + idBook + " AND " + Verse.Columns.chapter.name() + " = " + idCap, null, null, null, null, null);
     }
 
     public long addFav(int idBook, int chapter, int verse, boolean favState) {
         ContentValues values = new ContentValues();
-        values.put(Verse.Columns.favorito.name(), favState);
+        values.put(Verse.Columns.favorite.name(), favState);
         open();
-        return db.update(DATABASE_TABLE_VERSICULE, values,
-                Verse.Columns.id_libro.name() + " = " + idBook + " AND " +
-                        Verse.Columns.capitulo.name() + " = " + chapter + " AND " +
-                        Verse.Columns.versiculo.name() + " = " + verse, null);
+        return db.update(DATABASE_TABLE_VERSE, values,
+                Verse.Columns.id_book.name() + " = " + idBook + " AND " +
+                        Verse.Columns.chapter.name() + " = " + chapter + " AND " +
+                        Verse.Columns.verse.name() + " = " + verse, null);
     }
 
     public Cursor getAllFav() {
         open();
-        return db.query(DATABASE_TABLE_VERSICULE, null, Verse.Columns.favorito + " = 1", null, null, null, null);
+        return db.query(DATABASE_TABLE_VERSE, null, Verse.Columns.favorite + " = 1", null, null, null, null);
     }
 
     public Cursor getBook(long idBook) {
         open();
-        Cursor res = db.query(DATABASE_TABLE_BOOK, null, Book.Columns.id_libro.name() + " = " + idBook, null, null, null, null);
+        Cursor res = db.query(DATABASE_TABLE_BOOK, null, Book.Columns._id.name() + " = " + idBook, null, null, null, null);
         if (res != null) {
             res.moveToFirst();
         }

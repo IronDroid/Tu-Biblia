@@ -1,7 +1,9 @@
 package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +57,10 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 if (verse.isFav()) {
                     popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
                 }
+
+//                if (verse.hasNote()){
+//                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
+//                }
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -113,6 +120,8 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 break;
             case R.id.menu_note:
                 Log.e(TAG, "menuItemClick: nota");
+                showDialogNote(verse);
+                notifyItemChanged(pos);
                 break;
         }
         dbAdapter.close();
@@ -128,5 +137,27 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
             holder.layoutMark.addView(mark, params);
         }
+//        if (verse.hasNote()){
+//            View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
+//            mark.setBackgroundColor(context.getResources().getColor(R.color.colorNoteMark));
+//            holder.layoutMark.addView(mark, params);
+//        }
+    }
+
+    private void showDialogNote(final Verse verse) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Agregar Nota");
+        final EditText et = new EditText(context);
+        builder.setView(et);
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.e(TAG, "onClick: text " + et.getText());
+                Log.e(TAG, "onClick: verse" + verse.getChapter() + ":" + verse.getVerse());
+                // guardar nota en DB
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
     }
 }
