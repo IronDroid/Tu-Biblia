@@ -154,13 +154,14 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_note, null);
         final EditText et = (EditText) layout.findViewById(R.id.edittext_note);
+        if (!verse.getTextNote().isEmpty()) {
+            et.setText(verse.getTextNote());
+        }
         builder.setView(layout);
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (!et.getText().toString().isEmpty()) {
-                    Log.e(TAG, "onClick: text " + et.getText());
-                    Log.e(TAG, "onClick: verse" + verse.getChapter() + ":" + verse.getVerse());
                     // guardar nota en DB
                     DBAdapter dbAdapter = new DBAdapter(context);
                     dbAdapter.addNote(verse.getIdBook(), verse.getChapter(), verse.getVerse(), et.getText().toString());
@@ -180,9 +181,10 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Agregar Nota");
         builder.setMessage(verse.getTextNote());
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Editar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                showDialogNote(verse, pos);
             }
         });
         builder.setNegativeButton("Cancelar", null);

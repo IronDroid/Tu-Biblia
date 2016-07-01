@@ -1,6 +1,9 @@
 package org.ajcm.tubiblia.activities;
 
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.fragments.BookFragment;
@@ -20,6 +25,7 @@ import org.ajcm.tubiblia.fragments.NoteFragment;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
+    float elevation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content, new BookFragment()).commit();
+
+        Resources resources = getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        elevation = 4 * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     @Override
@@ -64,19 +74,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = null;
         Class fragmentClass = null;
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         switch (item.getItemId()){
             case R.id.nav_book:
                 fragmentClass = BookFragment.class;
                 getSupportActionBar().setTitle(R.string.app_name);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    appBarLayout.setElevation(0);
+                }
                 break;
             case R.id.nav_note:
                 fragmentClass = NoteFragment.class;
                 getSupportActionBar().setTitle(R.string.title_fragment_note);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    appBarLayout.setElevation(elevation);
+                }
                 break;
             case R.id.nav_fav:
                 fragmentClass = FavFragment.class;
                 getSupportActionBar().setTitle(R.string.title_fragment_fav);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    appBarLayout.setElevation(elevation);
+                }
                 break;
             default:
                 fragmentClass = BookFragment.class;
