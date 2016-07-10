@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "640616550265",
+    "firebase_url": "https://tu-biblia-cd206.firebaseio.com",
+    "project_id": "tu-biblia-cd206",
+    "storage_bucket": "tu-biblia-cd206.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640616550265:android:e86a59d1e5331c5f",
+        "android_client_info": {
+          "package_name": "org.ajcm.tubiblia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640616550265-f802suipiplv1kqn00iq2ti3qdimp8pm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkqo6nWnQtyJ1SalPL7hSwjrkfSxmNJ1o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

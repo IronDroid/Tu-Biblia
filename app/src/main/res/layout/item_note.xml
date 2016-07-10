@@ -78,6 +78,6 @@
         android:padding="@dimen/text_margin"
         android:text="12123"
         android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorNoteMark" />
 
 </LinearLayout>

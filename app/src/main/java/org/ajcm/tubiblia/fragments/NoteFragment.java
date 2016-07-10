@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
  */
 public class NoteFragment extends Fragment {
 
+    private NoteRecyclerViewAdapter noteRecyclerViewAdapter;
 
     public NoteFragment() {
     }
@@ -38,15 +40,21 @@ public class NoteFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             DBAdapter dbAdapter = new DBAdapter(context);
-            Cursor allNotes = dbAdapter.getAllNotes();
-            ArrayList<Verse> verses = new ArrayList<>();
-            while (allNotes.moveToNext()){
-                verses.add(Verse.fromCursor(allNotes));
-            }
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new NoteRecyclerViewAdapter(getActivity(), verses));
+            noteRecyclerViewAdapter = new NoteRecyclerViewAdapter(getActivity(), dbAdapter.getAllNotes());
+            recyclerView.setAdapter(noteRecyclerViewAdapter);
+            dbAdapter.close();
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DBAdapter dbAdapter = new DBAdapter(getContext());
+        noteRecyclerViewAdapter.setVerses(dbAdapter.getAllNotes());
+        noteRecyclerViewAdapter.notifyDataSetChanged();
+        dbAdapter.close();
     }
 }

@@ -22,16 +22,18 @@ public class CapFragment extends Fragment {
     private static final String ARG_CAP = "capitulo";
     private static final String ARG_ID_BOOK = "idBook";
     private static final String ARG_VERSE = "verse";
+    private static final String ARG_COLOR= "color";
     private int idBook;
     private int idCap;
     private int verse;
 
-    public static CapFragment newInstance(int idBook, int idCap, int verse) {
+    public static CapFragment newInstance(int idBook, int idCap, int verse, int color) {
         CapFragment fragment = new CapFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID_BOOK, idBook);
         args.putInt(ARG_CAP, idCap);
         args.putInt(ARG_VERSE, verse);
+        args.putInt(ARG_COLOR, color);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,7 +71,7 @@ public class CapFragment extends Fragment {
                 versiculos.add(Verse.fromCursor(capitulo));
             }
             dbAdapter.close();
-            recyclerView.setAdapter(new CapRecyclerViewAdapter(context, versiculos));
+            recyclerView.setAdapter(new CapRecyclerViewAdapter(context, versiculos, getArguments().getInt(ARG_COLOR)));
         }
         return view;
     }

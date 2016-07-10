@@ -28,10 +28,12 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     private static final String TAG = "CapRecyclerViewAdapter";
     private final ArrayList<Verse> mValues;
     private Context context;
+    private int color;
 
-    public CapRecyclerViewAdapter(Context context, ArrayList<Verse> items) {
+    public CapRecyclerViewAdapter(Context context, ArrayList<Verse> items, int color) {
         mValues = items;
         this.context = context;
+        this.color = color;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         final int pos = position;
         final Verse verse = mValues.get(position);
         holder.mIdView.setText(String.valueOf(verse.getVerse()));
+        holder.mIdView.setTextColor(this.color);
         holder.mContentView.setText(verse.getText());
         final boolean hasNote = verse.getTextNote().length() > 0;
         holder.verseMenu.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +79,26 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "LOL!!!  ", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                final PopupMenu popupMenu = new PopupMenu(context, view);
+                popupMenu.inflate(R.menu.verse_menu);
+
+                if (verse.isFav()) {
+                    popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
+                }
+
+                if (hasNote) {
+                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        menuItemClick(item, verse, pos, hasNote);
+                        return true;
+                    }
+                });
+                popupMenu.show();
             }
         });
 
@@ -149,7 +170,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     }
 
     private void showDialogNote(final Verse verse, final int pos) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_Dialog);
         builder.setTitle("Agregar Nota");
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_note, null);
@@ -178,8 +199,8 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     }
 
     private void showDialogNoteText(final Verse verse, final int pos) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Agregar Nota");
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_Dialog);
+        builder.setTitle("Mi Nota");
         builder.setMessage(verse.getTextNote());
         builder.setPositiveButton("Editar", new DialogInterface.OnClickListener() {
             @Override

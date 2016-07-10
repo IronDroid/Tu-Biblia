@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import org.ajcm.tubiblia.models.Verse;
 import java.util.ArrayList;
 
 public class FavFragment extends Fragment {
+
+    private static final String TAG = "FavFragment";
+    private FavRecyclerViewAdapter favRecyclerViewAdapter;
 
     public FavFragment() {
     }
@@ -46,15 +50,22 @@ public class FavFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             DBAdapter dbAdapter = new DBAdapter(context);
-            Cursor allFav = dbAdapter.getAllFav();
-            ArrayList<Verse> verses = new ArrayList<>();
-            while (allFav.moveToNext()){
-                verses.add(Verse.fromCursor(allFav));
-            }
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new FavRecyclerViewAdapter(getActivity(), verses));
+            favRecyclerViewAdapter = new FavRecyclerViewAdapter(getActivity(), dbAdapter.getAllFav());
+            recyclerView.setAdapter(favRecyclerViewAdapter);
+            dbAdapter.close();
         }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: para hacer refresh");
+        DBAdapter dbAdapter = new DBAdapter(getContext());
+        favRecyclerViewAdapter.setVerses(dbAdapter.getAllFav());
+        favRecyclerViewAdapter.notifyDataSetChanged();
+        dbAdapter.close();
     }
 }

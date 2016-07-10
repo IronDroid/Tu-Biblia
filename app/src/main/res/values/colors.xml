@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#607D8B</color>
-    <color name="colorPrimaryDark">#546E7A</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#D32F2F</color>
+    <color name="colorPrimaryDark">#C62828</color>
+    <color name="colorAccent">@android:color/white</color>
 
     <color name="colorPrimaryLightDefault">#FAFAFA</color>
     <color name="colorAccentLightDefault">#E91E63</color>
 
+    <color name="colorAccentText">#FBC02D</color>
+
     <color name="colorPrimaryDarkDefault">#37474F</color>
     <color name="colorAccentDarkDefault">#2196F3</color>
 
-    <color name="colorFavMark">#FFFF00</color>
-    <color name="colorNoteMark">#448AFF</color>
+    <color name="colorFavMark">#FBC02D</color>
+    <color name="colorNoteMark">#00C853</color>
+
+    <string-array name="PRIMARY_COLORS">
+        <item>#D32F2F</item>
+        <item>#F57C00</item>
+        <item>#7B1FA2</item>
+        <item>#1976D2</item>
+        <item>#0097A7</item>
+        <item>#512DA8</item>
+        <item>#00796B</item>
+        <item>#388E3C</item>
+        <item>#E64A19</item>
+        <item>#FFA000</item>
+        <item>#AFB42B</item>
+        <item>#5D4037</item>
+        <item>#455A64</item>
+        <item>#FBC02D</item>
+        <item>#C2185B</item>
+    </string-array>
+
+    <string-array name="PRIMARY_COLORS_DARK">
+        <item>#C62828</item>aa
+        <item>#EF6C00</item>aa
+        <item>#6A1B9A</item>aa
+        <item>#1565C0</item>aa
+        <item>#00838F</item>asa
+        <item>#4527A0</item>asas
+        <item>#00695C</item>asas
+        <item>#2E7D32</item>
+        <item>#D84315</item>asa
+        <item>#FF8F00</item>sds
+        <item>#9E9D24</item>sas
+        <item>#4E342E</item>
+        <item>#37474F</item>
+        <item>#F9A825</item>aas
+        <item>#AD1457</item>
+    </string-array>
 </resources>

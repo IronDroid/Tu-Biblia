@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Book;
 import org.ajcm.tubiblia.models.Verse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Verse> mValues;
+    private static final String TAG = "FavRecyclerViewAdapter";
+    private List<Verse> mValues;
     private Context context;
 
     public FavRecyclerViewAdapter(Context context, List<Verse> items) {
@@ -36,6 +39,7 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        Log.e(TAG, "onBindViewHolder");
         holder.mItem = mValues.get(position);
         DBAdapter dbAdapter = new DBAdapter(context);
         Cursor cursor = dbAdapter.getBook(mValues.get(position).getIdBook());
@@ -81,5 +85,9 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+    }
+
+    public void setVerses(List<Verse> verses){
+        this.mValues = verses;
     }
 }

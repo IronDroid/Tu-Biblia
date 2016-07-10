@@ -9,9 +9,10 @@ public class Book {
     private int idBook;
     private String nameBook;
     private int numChapter;
+    private int idDivider;
 
     public enum Columns {
-        _id, name, num_chapter
+        _id, name, num_chapter, id_divider
     }
 
     public int getIdBook() {
@@ -38,11 +39,20 @@ public class Book {
         this.numChapter = numChapter;
     }
 
+    public int getIdDivider() {
+        return idDivider;
+    }
+
+    public void setIdDivider(int idDivider) {
+        this.idDivider = idDivider;
+    }
+
     public static Book fromCursor(Cursor cursor){
         Book book = new Book();
         book.setIdBook(cursor.getInt(Columns._id.ordinal()));
         book.setNameBook(cursor.getString(Columns.name.ordinal()));
         book.setNumChapter(cursor.getInt(Columns.num_chapter.ordinal()));
+        book.setIdDivider(cursor.getInt(Columns.id_divider.ordinal()));
         return book;
     }
 }

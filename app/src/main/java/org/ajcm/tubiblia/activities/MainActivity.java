@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.fragments.BookFragment;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Resources resources = getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        elevation = 4 * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        elevation = 4 * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class fragmentClass = null;
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_book:
                 fragmentClass = BookFragment.class;
                 getSupportActionBar().setTitle(R.string.app_name);
@@ -98,18 +99,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     appBarLayout.setElevation(elevation);
                 }
                 break;
-            default:
-                fragmentClass = BookFragment.class;
+            case R.id.nav_share:
+                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_rate:
+                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_about:
+                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

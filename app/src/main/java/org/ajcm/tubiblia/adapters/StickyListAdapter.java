@@ -2,15 +2,19 @@ package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.ajcm.tubiblia.ColorPalette;
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.activities.BookActivity;
 import org.ajcm.tubiblia.models.Book;
+import org.ajcm.tubiblia.models.DividerBook;
 
 import java.util.ArrayList;
 
@@ -21,17 +25,22 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class StickyListAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 
+    private static final String TAG = "StickyListAdapter";
+
     public static final String ID_BOOK = "idBook";
     public static final String NUM_CAPS = "numCaps";
     public static final String NAME_BOOK = "nameBook";
     public static final String CHAPTER_BOOK = "chapterBook";
     public static final String VERSE_BOOK = "verseBook";
+    public static final String ID_DIVIDER = "idDivider";
     private Context context;
     private ArrayList<Book> booksList;
+    private ArrayList<DividerBook> dividerBooks;
 
-    public StickyListAdapter(Context context, ArrayList<Book> list) {
+    public StickyListAdapter(Context context, ArrayList<Book> list, ArrayList<DividerBook> dividerBooks) {
         this.context = context;
         booksList = list;
+        this.dividerBooks = dividerBooks;
     }
 
     @Override
@@ -94,6 +103,8 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
             vh = (ViewHolder) convertView.getTag();
         }
         vh.nameBook.setText(booksList.get(position).getNameBook());
+        String[] colorsDark = ColorPalette.getColorsDark(context);
+        vh.nameBook.setTextColor(Color.parseColor(colorsDark[booksList.get(position).getIdDivider()]));
         vh.bookInfo.setText(booksList.get(position).getNumChapter() + " capitulo(s)");
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +113,7 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
                 intent.putExtra(ID_BOOK, booksList.get(position).getIdBook());
                 intent.putExtra(NUM_CAPS, booksList.get(position).getNumChapter());
                 intent.putExtra(NAME_BOOK, booksList.get(position).getNameBook());
+                intent.putExtra(ID_DIVIDER, booksList.get(position).getIdDivider());
                 context.startActivity(intent);
             }
         });
