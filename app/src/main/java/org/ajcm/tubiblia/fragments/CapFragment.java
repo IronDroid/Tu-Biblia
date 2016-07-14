@@ -70,9 +70,10 @@ public class CapFragment extends Fragment {
             while (capitulo.moveToNext()) {
                 versiculos.add(Verse.fromCursor(capitulo));
             }
-            dbAdapter.close();
             recyclerView.setAdapter(new CapRecyclerViewAdapter(context, versiculos, getArguments().getInt(ARG_COLOR)));
             recyclerView.setHasFixedSize(true);
+            capitulo.close();
+            dbAdapter.close();
         }
         return view;
     }

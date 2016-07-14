@@ -16,4 +16,7 @@
     <string name="share">Compartir</string>
     <string name="copy">Copiar</string>
     <string name="message">mensaje</string>
+
+    <string name="banner_ad_main">ca-app-pub-5411285117883478/2965620146</string>
+    <string name="banner_ad_verses">ca-app-pub-5411285117883478/8298326548</string>
 </resources>

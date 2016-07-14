@@ -47,6 +47,7 @@ public class DBAdapter {
         while (res.moveToNext()) {
             books.add(Book.fromCursor(res));
         }
+        res.close();
         return books;
     }
 
@@ -96,6 +97,7 @@ public class DBAdapter {
         while (res.moveToNext()) {
             verses.add(Verse.fromCursor(res));
         }
+        res.close();
         return verses;
     }
 
@@ -106,6 +108,7 @@ public class DBAdapter {
         while (res.moveToNext()) {
             verses.add(Verse.fromCursor(res));
         }
+        res.close();
         return verses;
     }
 
@@ -124,6 +127,7 @@ public class DBAdapter {
         Cursor res = db.query(DATABASE_TABLE_DIVIDER, null, DividerBook.Columns._id.name() + " = " + idBook, null, null, null, null);
         if (res != null) {
             res.moveToFirst();
+            res.close();
         }
         return DividerBook.fromCursor(res);
     }
@@ -135,6 +139,7 @@ public class DBAdapter {
         while (res.moveToNext()) {
             dividerBooks.add(DividerBook.fromCursor(res));
         }
+        res.close();
         return dividerBooks;
     }
 

@@ -3,25 +3,24 @@ package org.ajcm.tubiblia.activities;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import org.ajcm.tubiblia.ColorPalette;
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.adapters.PagerAdapter;
 import org.ajcm.tubiblia.adapters.StickyListAdapter;
-import org.ajcm.tubiblia.dataset.DBAdapter;
-import org.ajcm.tubiblia.models.DividerBook;
-
-import java.util.ArrayList;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -34,6 +33,7 @@ public class BookActivity extends AppCompatActivity {
     private int intChapter;
     private int intVerse;
     private int idDivider;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,17 @@ public class BookActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(intChapter - 1);
         tabLayout.setupWithViewPager(viewPager);
+
+        adView = (AdView) findViewById(R.id.adViewVerse);
+//        AdRequest adRequest = new AdRequest.Builder().addTestDevice("9229DC0B97D1B5E5392C3125B2BD6FA2").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                adView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override

@@ -12,8 +12,8 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
-        android:elevation="4dp"
         android:layout_height="wrap_content"
+        android:elevation="4dp"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="#80ffffff" />
@@ -22,6 +22,15 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@android:color/white" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewVerse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="@string/banner_ad_main" />
 
 </LinearLayout>
