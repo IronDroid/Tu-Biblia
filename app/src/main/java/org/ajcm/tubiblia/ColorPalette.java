@@ -17,6 +17,10 @@ public final class ColorPalette {
         return context.getResources().getStringArray(R.array.PRIMARY_COLORS_DARK);
     }
 
+    public static String[] getColors400(Context context){
+        return context.getResources().getStringArray(R.array.COLORS_400);
+    }
+
     public final static int[][] PRIMARY_COLORS_SUB = new int[][]{
             new int[]{
                     Color.parseColor("#FFEBEE"),

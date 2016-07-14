@@ -3,6 +3,8 @@ package org.ajcm.tubiblia.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,27 +95,39 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
         ViewHolder vh;
+        final Book book = booksList.get(position);
         if (convertView == null) {
             vh = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_book, null);
+            vh.icidBook = (TextView) convertView.findViewById(R.id.icid_book);
             vh.nameBook = (TextView) convertView.findViewById(R.id.book_name);
             vh.bookInfo = (TextView) convertView.findViewById(R.id.book_info);
             convertView.setTag(vh);
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        vh.nameBook.setText(booksList.get(position).getNameBook());
-        String[] colorsDark = ColorPalette.getColorsDark(context);
-        vh.nameBook.setTextColor(Color.parseColor(colorsDark[booksList.get(position).getIdDivider()]));
-        vh.bookInfo.setText(booksList.get(position).getNumChapter() + " capitulo(s)");
+        vh.nameBook.setText(book.getNameBook());
+        String[] colorsDark = ColorPalette.getColors400(context);
+
+        GradientDrawable bgShape = (GradientDrawable) vh.icidBook.getBackground();
+        bgShape.setColor(Color.parseColor(colorsDark[book.getIdDivider()]));
+        String[] split = book.getNameBook().split(" ");
+        if (split.length == 2){
+            String s = split[0] + split[1].substring(0, 1);
+            vh.icidBook.setText(s.toUpperCase());
+        } else{
+            vh.icidBook.setText(book.getNameBook().substring(0,2).toUpperCase());
+        }
+
+        vh.bookInfo.setText(book.getNumChapter() + " capitulo(s)");
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BookActivity.class);
-                intent.putExtra(ID_BOOK, booksList.get(position).getIdBook());
-                intent.putExtra(NUM_CAPS, booksList.get(position).getNumChapter());
-                intent.putExtra(NAME_BOOK, booksList.get(position).getNameBook());
-                intent.putExtra(ID_DIVIDER, booksList.get(position).getIdDivider());
+                intent.putExtra(ID_BOOK, book.getIdBook());
+                intent.putExtra(NUM_CAPS, book.getNumChapter());
+                intent.putExtra(NAME_BOOK, book.getNameBook());
+                intent.putExtra(ID_DIVIDER, book.getIdDivider());
                 context.startActivity(intent);
             }
         });
@@ -121,6 +135,7 @@ public class StickyListAdapter extends BaseAdapter implements StickyListHeadersA
     }
 
     class ViewHolder {
+        TextView icidBook;
         TextView nameBook;
         TextView bookInfo;
     }

@@ -1,24 +1,32 @@
 package org.ajcm.tubiblia.adapters;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.ajcm.tubiblia.ColorPalette;
+import org.ajcm.tubiblia.IconizedMenu;
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.dataset.DBAdapter;
+import org.ajcm.tubiblia.models.Book;
 import org.ajcm.tubiblia.models.Verse;
 
 import java.util.ArrayList;
@@ -29,11 +37,14 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     private final ArrayList<Verse> mValues;
     private Context context;
     private int color;
+    private Book book;
 
     public CapRecyclerViewAdapter(Context context, ArrayList<Verse> items, int color) {
         mValues = items;
         this.context = context;
         this.color = color;
+        DBAdapter dbAdapter = new DBAdapter(this.context);
+        book = dbAdapter.getBook(mValues.get(0).getIdBook());
     }
 
     @Override
@@ -47,42 +58,18 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final int pos = position;
         final Verse verse = mValues.get(position);
+        holder.verse = mValues.get(position);
         holder.mIdView.setText(String.valueOf(verse.getVerse()));
         holder.mIdView.setTextColor(this.color);
         holder.mContentView.setText(verse.getText());
         final boolean hasNote = verse.getTextNote().length() > 0;
-        holder.verseMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final PopupMenu popupMenu = new PopupMenu(context, view);
-                popupMenu.inflate(R.menu.verse_menu);
-
-                if (verse.isFav()) {
-                    popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
-                }
-
-                if (hasNote) {
-                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
-                }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        menuItemClick(item, verse, pos, hasNote);
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
+        final IconizedMenu popupMenu = new IconizedMenu(context, holder.mContentView);
+        popupMenu.inflate(R.menu.verse_menu, color);
+        setupTouchDelegate(context, holder.mContentView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final PopupMenu popupMenu = new PopupMenu(context, view);
-                popupMenu.inflate(R.menu.verse_menu);
-
                 if (verse.isFav()) {
                     popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
                 }
@@ -91,7 +78,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                     popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
                 }
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                popupMenu.setOnMenuItemClickListener(new IconizedMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         menuItemClick(item, verse, pos, hasNote);
@@ -114,24 +101,27 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public final ImageView verseMenu;
         public LinearLayout layoutMark;
+        public Verse verse;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
-            verseMenu = (ImageView) view.findViewById(R.id.verse_menu);
             layoutMark = (LinearLayout) view.findViewById(R.id.layout_mark);
+            Log.e(TAG, "ViewHolder: " + getAdapterPosition());
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+
     }
 
+    @SuppressLint("NewApi")
+    @SuppressWarnings("deprecation")
     private void menuItemClick(MenuItem item, Verse verse, int pos, boolean hasNote) {
         DBAdapter dbAdapter = new DBAdapter(context);
         switch (item.getItemId()) {
@@ -141,11 +131,33 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 notifyItemChanged(pos);
                 break;
             case R.id.menu_note:
-                Log.e(TAG, "menuItemClick: nota");
                 if (hasNote) {
                     showDialogNoteText(verse, pos);
                 } else {
                     showDialogNote(verse, pos);
+                }
+                break;
+            case R.id.menu_share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Versiculo");
+                Book book = dbAdapter.getBook(verse.getIdBook());
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, verse.getText() + "" +
+                        "\n" + book.getNameBook() +" " + verse.getChapter() + ":" + verse.getVerse());
+                context.startActivity(Intent.createChooser(sharingIntent, "Compartir via..."));
+                break;
+            case R.id.menu_copy:
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context
+                            .getSystemService(context.CLIPBOARD_SERVICE);
+                    clipboard.setText(verse.getText());
+                } else {
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
+                            .getSystemService(context.CLIPBOARD_SERVICE);
+                    android.content.ClipData clip = android.content.ClipData
+                            .newPlainText(context.getResources().getString(R.string.message), verse.getText());
+                    clipboard.setPrimaryClip(clip);
                 }
                 break;
         }
@@ -159,12 +171,14 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.layoutMark.removeAllViews();
         if (verse.isFav()) {
             View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-            mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
+//            mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
+            mark.setBackgroundColor(color);
             holder.layoutMark.addView(mark, params);
         }
         if (hasNote) {
             View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-            mark.setBackgroundColor(context.getResources().getColor(R.color.colorNoteMark));
+            String[] colors400 = ColorPalette.getColors400(context);
+            mark.setBackgroundColor(Color.parseColor(colors400[book.getIdDivider()]));
             holder.layoutMark.addView(mark, params);
         }
     }
@@ -210,5 +224,22 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         });
         builder.setNegativeButton("Cancelar", null);
         builder.show();
+    }
+
+    private static void setupTouchDelegate(Context context, final View menu) {
+        final int offset = context.getResources().getDimensionPixelSize(R.dimen.menu_touchdelegate);
+        assert menu.getParent() != null;
+        ((View) menu.getParent()).post(new Runnable() {
+            public void run() {
+                Rect delegateArea = new Rect();
+                menu.getHitRect(delegateArea);
+                delegateArea.top -= offset;
+                delegateArea.bottom += offset;
+                delegateArea.left -= offset;
+                delegateArea.right += offset;
+                TouchDelegate expandedArea = new TouchDelegate(delegateArea, menu);
+                ((View) menu.getParent()).setTouchDelegate(expandedArea);
+            }
+        });
     }
 }

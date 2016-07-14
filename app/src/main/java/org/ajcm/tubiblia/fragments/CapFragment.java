@@ -72,6 +72,7 @@ public class CapFragment extends Fragment {
             }
             dbAdapter.close();
             recyclerView.setAdapter(new CapRecyclerViewAdapter(context, versiculos, getArguments().getInt(ARG_COLOR)));
+            recyclerView.setHasFixedSize(true);
         }
         return view;
     }

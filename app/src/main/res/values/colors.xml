@@ -50,4 +50,22 @@
         <item>#F9A825</item>aas
         <item>#AD1457</item>
     </string-array>
+
+    <string-array name="COLORS_400">
+        <item>#D32F2F</item>
+        <item>#FFA726</item>
+        <item>#AB47BC</item>
+        <item>#42A5F5</item>
+        <item>#26C6DA</item>
+        <item>#7E57C2</item>
+        <item>#26A69A</item>
+        <item>#66BB6A</item>
+        <item>#FF7043</item>
+        <item>#FFCA28</item>
+        <item>#D4E157</item>
+        <item>#8D6E63</item>
+        <item>#455A64</item>
+        <item>#FBC02D</item>
+        <item>#C2185B</item>
+    </string-array>
 </resources>

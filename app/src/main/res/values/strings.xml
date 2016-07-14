@@ -13,4 +13,7 @@
     <string name="unbookmark">Desmarcar Favorito</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="share">Compartir</string>
+    <string name="copy">Copiar</string>
+    <string name="message">mensaje</string>
 </resources>

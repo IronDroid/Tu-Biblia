@@ -2,8 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_note"
+        android:icon="@drawable/ic_note_black_24dp"
         android:title="@string/add_note" />
     <item
         android:id="@+id/menu_fav"
+        android:icon="@drawable/ic_favorite_black_24dp"
         android:title="@string/bookmark" />
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="@string/share" />
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="@drawable/ic_content_copy_black_24dp"
+        android:title="@string/copy" />
 </menu>

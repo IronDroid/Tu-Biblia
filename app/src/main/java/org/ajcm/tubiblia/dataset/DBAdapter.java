@@ -44,7 +44,7 @@ public class DBAdapter {
         open();
         Cursor res = db.query(DATABASE_TABLE_BOOK, null, null, null, null, null, null);
         ArrayList<Book> books = new ArrayList<>();
-        while (res.moveToNext()){
+        while (res.moveToNext()) {
             books.add(Book.fromCursor(res));
         }
         return books;
@@ -103,19 +103,20 @@ public class DBAdapter {
         open();
         Cursor res = db.query(DATABASE_TABLE_VERSE, null, Verse.Columns.text_note + " != ''", null, null, null, null);
         ArrayList<Verse> verses = new ArrayList<>();
-        while(res.moveToNext()){
+        while (res.moveToNext()) {
             verses.add(Verse.fromCursor(res));
         }
         return verses;
     }
 
-    public Cursor getBook(long idBook) {
+    public Book getBook(long idBook) {
         open();
         Cursor res = db.query(DATABASE_TABLE_BOOK, null, Book.Columns._id.name() + " = " + idBook, null, null, null, null);
         if (res != null) {
             res.moveToFirst();
+            return Book.fromCursor(res);
         }
-        return res;
+        return null;
     }
 
     public DividerBook getDivider(long idBook) {

@@ -31,19 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/verse_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:padding="8dp"
-            android:src="@drawable/ic_more_vert_black_24dp"
-            tools:ignore="ContentDescription" />
-
         <LinearLayout
             android:id="@+id/layout_mark"
             android:layout_width="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_height="match_parent"
             android:orientation="vertical" />
     </LinearLayout>

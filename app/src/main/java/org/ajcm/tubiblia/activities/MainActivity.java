@@ -1,6 +1,11 @@
 package org.ajcm.tubiblia.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,9 +15,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +30,13 @@ import org.ajcm.tubiblia.fragments.BookFragment;
 import org.ajcm.tubiblia.fragments.FavFragment;
 import org.ajcm.tubiblia.fragments.NoteFragment;
 
+import se.emilsjolander.stickylistheaders.BuildConfig;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
-    float elevation;
+    private float elevation;
+    private String packageName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Resources resources = getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         elevation = 4 * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+
+        packageName = getPackageName();
     }
 
     @Override
@@ -77,6 +89,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class fragmentClass = null;
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            MenuItem menuItem = navigationView.getMenu().getItem(i);
+            if (menuItem.getSubMenu() != null) {
+                for (int j = 0; j < menuItem.getSubMenu().size(); j++) {
+                    menuItem.getSubMenu().getItem(j).getIcon().clearColorFilter();
+                }
+            } else {
+                menuItem.getIcon().clearColorFilter();
+            }
+        }
+
         switch (item.getItemId()) {
             case R.id.nav_book:
                 fragmentClass = BookFragment.class;
@@ -100,13 +124,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.nav_share:
-                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Tu Biblia RV 1960");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=" + packageName);
+                startActivity(Intent.createChooser(sharingIntent, "Compartir via..."));
                 break;
             case R.id.nav_rate:
-                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                 break;
             case R.id.nav_about:
-                Toast.makeText(MainActivity.this, "nav", Toast.LENGTH_SHORT).show();
+                dialogAbout();
                 break;
         }
 
@@ -121,5 +149,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void dialogAbout() {
+        new android.app.AlertDialog.Builder(this).setTitle(getResources().getString(R.string.app_name) + " " +
+                "v" + BuildConfig.VERSION_NAME)
+                .setMessage("Reina Valera 1960" +
+                        "\nDesarrollado por:" +
+                        "\nAlex Jhonny Cruz Mamani" +
+                        "\nDesarrollador Android Entusiasta" +
+                        "\nEmail: jhonlimaster@gmail.com" +
+                        "\nTwitter: @jhonlimaster")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
     }
 }
