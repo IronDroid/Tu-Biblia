@@ -2,9 +2,14 @@ package org.ajcm.tubiblia.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,20 +26,17 @@ import org.ajcm.tubiblia.models.Verse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerViewAdapter.ViewHolder> {
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "FavRecyclerViewAdapter";
+    private static final String TAG = "SearchRecyclerViewAdapter";
     private List<Verse> mValues;
     private Context context;
+    private String filter;
 
-    public FavRecyclerViewAdapter(Context context, List<Verse> items) {
+    public SearchRecyclerViewAdapter(Context context, List<Verse> items, String filter) {
         this.context = context;
         mValues = items;
-        Log.e(TAG, "FavRecyclerViewAdapter: " + mValues.size());
-    }
-    public FavRecyclerViewAdapter(Context context) {
-        this.context = context;
-        mValues = new ArrayList<>();
+        this.filter = filter;
     }
 
     @Override
@@ -53,7 +55,15 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
         String[] colorsDark = ColorPalette.getColorsDark(context);
         holder.mIdView.setTextColor(Color.parseColor(colorsDark[book.getIdDivider()]));
         holder.mIdView.setText(book.getNameBook() + " " + holder.mItem.getChapter() + ":" + holder.mItem.getVerse());
-        holder.mContentView.setText(mValues.get(position).getText());
+
+        String text = mValues.get(position).getText();
+        mValues.get(position).setText(text.replaceAll(filter,"<strong>"+filter+"</strong>"));
+        holder.mContentView.setText(Html.fromHtml(mValues.get(position).getText()));
+
+//        SpannableStringBuilder sb = new SpannableStringBuilder(mValues.get(position).getText());
+//        StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+//        sb.setSpan(bss, 2, 6, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//        holder.mContentView.setText(sb);
 
         holder.mIdView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +88,7 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
+        public TextView mContentView;
         public Verse mItem;
 
         public ViewHolder(View view) {
@@ -94,7 +104,7 @@ public class FavRecyclerViewAdapter extends RecyclerView.Adapter<FavRecyclerView
         }
     }
 
-    public void setVerses(List<Verse> verses){
+    public void setVerses(List<Verse> verses) {
         this.mValues = verses;
     }
 }

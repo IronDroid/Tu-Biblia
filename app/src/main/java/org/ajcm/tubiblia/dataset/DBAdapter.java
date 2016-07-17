@@ -14,6 +14,7 @@ import org.ajcm.tubiblia.models.Verse;
 import org.ajcm.tubiblia.utils.UserPreferences;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by jhonlimaster on 09-06-16.
@@ -141,6 +142,27 @@ public class DBAdapter {
         }
         res.close();
         return dividerBooks;
+    }
+
+    public ArrayList<Verse> getSearch(String text, boolean swFilter) {
+        open();
+        Cursor res = db.query(DATABASE_TABLE_VERSE, null, Verse.Columns.text_verse + " like '%" + text + "%'", null, null, null, null);
+        ArrayList<Verse> verses = new ArrayList<>();
+        while (res.moveToNext()) {
+            Verse verse = Verse.fromCursor(res);
+            if (swFilter){
+                String[] split = verse.getText().split(" ");
+                for (String sp : split) {
+                    if (sp.length() == text.length() && sp.contains(text)) {
+                        verses.add(verse);
+                    }
+                }
+            } else {
+                verses.add(verse);
+            }
+        }
+        res.close();
+        return verses;
     }
 
     public DBAdapter open() throws SQLException {

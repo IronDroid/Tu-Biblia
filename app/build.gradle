@@ -7,13 +7,22 @@ android {
         applicationId "org.ajcm.tubiblia"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1"
+        versionCode 2
+        versionName "0.5"
+    }
+    signingConfigs {
+        release {
+            storeFile file('/home/jhonlimaster/keystores/biblia.jks')
+            storePassword KEYSTORE_PASSWORD
+            keyAlias 'tubiblia'
+            keyPassword KEY_PASSWORD
+        }
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

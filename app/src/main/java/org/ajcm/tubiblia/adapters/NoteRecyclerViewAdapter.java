@@ -29,13 +29,11 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
 
     private static final String TAG = "NoteRecyclerViewAdapter";
     private Context context;
-    private DBAdapter dbAdapter;
     private List<Verse> verses;
 
     public NoteRecyclerViewAdapter(Context context, List<Verse> items) {
         this.context = context;
         verses = items;
-        dbAdapter = new DBAdapter(this.context);
     }
 
     @Override
@@ -49,7 +47,9 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.e(TAG, "onBindViewHolder: ");
         holder.mItem = verses.get(position);
+        DBAdapter dbAdapter = new DBAdapter(context);
         final Book book = dbAdapter.getBook(verses.get(position).getIdBook());
+        dbAdapter.close();
         String[] colorsDark = ColorPalette.getColorsDark(context);
         holder.mIdView.setTextColor(Color.parseColor(colorsDark[book.getIdDivider()]));
         holder.mIdView.setText(book.getNameBook() + " " + holder.mItem.getChapter() + ":" + holder.mItem.getVerse());
@@ -84,7 +84,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
             public void onClick(View view) {
                 holder.layoutEditNote.setVisibility(View.GONE);
                 holder.layoutShowNote.setVisibility(View.VISIBLE);
-
+                DBAdapter dbAdapter = new DBAdapter(context);
                 dbAdapter.addNote(verses.get(position).get_id(), holder.editTextNote.getText().toString());
                 dbAdapter.close();
                 verses.get(position).setTextNote(holder.editTextNote.getText().toString());
@@ -98,7 +98,9 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
             public void onClick(View view) {
                 holder.layoutEditNote.setVisibility(View.GONE);
                 holder.layoutShowNote.setVisibility(View.VISIBLE);
+                DBAdapter dbAdapter = new DBAdapter(context);
                 dbAdapter.deleteNote(verses.get(position).get_id());
+                dbAdapter.close();
                 notifyItemRemoved(position);
                 verses.remove(position);
             }

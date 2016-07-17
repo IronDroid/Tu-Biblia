@@ -76,11 +76,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_search:
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -100,17 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class fragmentClass = null;
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        for (int i = 0; i < navigationView.getMenu().size(); i++) {
-            MenuItem menuItem = navigationView.getMenu().getItem(i);
-            if (menuItem.getSubMenu() != null) {
-                for (int j = 0; j < menuItem.getSubMenu().size(); j++) {
-                    menuItem.getSubMenu().getItem(j).getIcon().clearColorFilter();
-                }
-            } else {
-                menuItem.getIcon().clearColorFilter();
-            }
-        }
+        clearColorFilter();
 
         switch (item.getItemId()) {
             case R.id.nav_book:
@@ -163,8 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void dialogAbout() {
-        new android.app.AlertDialog.Builder(this).setTitle(getResources().getString(R.string.app_name) + " " +
-                "v" + BuildConfig.VERSION_NAME)
+        new android.app.AlertDialog.Builder(this).setTitle(getResources().getString(R.string.app_name))
                 .setMessage("Reina Valera 1960" +
                         "\nDesarrollado por:" +
                         "\nAlex Jhonny Cruz Mamani" +
@@ -179,9 +174,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }).show();
     }
 
+    private void clearColorFilter(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            MenuItem menuItem = navigationView.getMenu().getItem(i);
+            if (menuItem.getSubMenu() != null) {
+                for (int j = 0; j < menuItem.getSubMenu().size(); j++) {
+                    menuItem.getSubMenu().getItem(j).getIcon().clearColorFilter();
+                }
+            } else {
+                menuItem.getIcon().clearColorFilter();
+            }
+        }
+    }
 
     @Override
     public void onPause() {
+        clearColorFilter();
         if (adView != null) {
             adView.pause();
         }
@@ -191,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
+        clearColorFilter();
         if (adView != null) {
             adView.resume();
         }

@@ -1,24 +1,19 @@
 package org.ajcm.tubiblia.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,6 +40,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         this.color = color;
         DBAdapter dbAdapter = new DBAdapter(this.context);
         book = dbAdapter.getBook(mValues.get(0).getIdBook());
+        dbAdapter.close();
     }
 
     @Override
@@ -64,7 +60,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.mContentView.setText(verse.getText());
         final boolean hasNote = verse.getTextNote().length() > 0;
         final IconizedMenu popupMenu = new IconizedMenu(context, holder.mContentView);
-        popupMenu.inflate(R.menu.verse_menu, color);
+        popupMenu.inflate(R.menu.menu_verse, color);
         setupTouchDelegate(context, holder.mContentView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +106,6 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
             layoutMark = (LinearLayout) view.findViewById(R.id.layout_mark);
-            Log.e(TAG, "ViewHolder: " + getAdapterPosition());
         }
 
         @Override
@@ -141,7 +136,6 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Versiculo");
-                Book book = dbAdapter.getBook(verse.getIdBook());
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, verse.getText() + "" +
                         "\n" + book.getNameBook() +" " + verse.getChapter() + ":" + verse.getVerse());
                 context.startActivity(Intent.createChooser(sharingIntent, "Compartir via..."));
@@ -151,12 +145,12 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
                     android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context
                             .getSystemService(context.CLIPBOARD_SERVICE);
-                    clipboard.setText(verse.getText());
+                    clipboard.setText(verse.getText() +"\n"+ book.getNameBook()+ " " + verse.getChapter()+ ":" + verse.getVerse());
                 } else {
                     android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
                             .getSystemService(context.CLIPBOARD_SERVICE);
                     android.content.ClipData clip = android.content.ClipData
-                            .newPlainText(context.getResources().getString(R.string.message), verse.getText());
+                            .newPlainText(context.getResources().getString(R.string.message), verse.getText() +"\n"+ book.getNameBook()+ " " + verse.getChapter()+ ":" + verse.getVerse());
                     clipboard.setPrimaryClip(clip);
                 }
                 break;

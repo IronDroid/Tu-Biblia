@@ -33,6 +33,7 @@ public class App extends Application {
         if (!UserPreferences.getBoolean(this, App.COPY_DB)) {
             try {
                 dbAdapter.loadDB();
+                dbAdapter.close();
             } catch (Exception e) {
                 Log.e(TAG, "onCreate: db copy fail", e);
             }
