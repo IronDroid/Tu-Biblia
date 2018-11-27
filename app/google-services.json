@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "640616550265-ssvs4a8i61s9er5nui1p6l5m1m4e8qrt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.ajcm.tubiblia",
+            "certificate_hash": "4445e43376f98f4b0f03131269a41a0d1b8993c1"
+          }
+        },
+        {
           "client_id": "640616550265-f802suipiplv1kqn00iq2ti3qdimp8pm.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -35,7 +43,8 @@
         "ads_service": {
           "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5411285117883478~1488886946"
     }
   ],
   "configuration_version": "1"

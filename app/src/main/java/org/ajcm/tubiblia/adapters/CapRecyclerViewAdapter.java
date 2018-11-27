@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.ajcm.tubiblia.ColorPalette;
-import org.ajcm.tubiblia.IconizedMenu;
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Book;
@@ -59,8 +59,8 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.mIdView.setTextColor(this.color);
         holder.mContentView.setText(verse.getText());
         final boolean hasNote = verse.getTextNote().length() > 0;
-        final IconizedMenu popupMenu = new IconizedMenu(context, holder.mContentView);
-        popupMenu.inflate(R.menu.menu_verse, color);
+        final PopupMenu popupMenu = new PopupMenu(context, holder.mContentView);
+        popupMenu.inflate(R.menu.menu_verse);
         setupTouchDelegate(context, holder.mContentView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +74,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                     popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
                 }
 
-                popupMenu.setOnMenuItemClickListener(new IconizedMenu.OnMenuItemClickListener() {
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         menuItemClick(item, verse, pos, hasNote);

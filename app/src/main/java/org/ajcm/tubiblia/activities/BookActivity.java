@@ -32,7 +32,6 @@ public class BookActivity extends AppCompatActivity {
     private int intChapter;
     private int intVerse;
     private int idDivider;
-    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +64,6 @@ public class BookActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(intChapter - 1);
         tabLayout.setupWithViewPager(viewPager);
-
-        adView = (AdView) findViewById(R.id.adViewVerse);
-//        AdRequest adRequest = new AdRequest.Builder().addTestDevice("9229DC0B97D1B5E5392C3125B2BD6FA2").build();
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                adView.setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     @Override

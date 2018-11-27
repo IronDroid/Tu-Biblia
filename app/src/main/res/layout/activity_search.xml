@@ -24,7 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:checked="true"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="Palabra exacta"
         android:textColor="@android:color/white" />

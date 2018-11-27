@@ -28,7 +28,9 @@ public class App extends Application {
         super.onCreate();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-5411285117883478~1488886946");
+
         SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
+
         DBAdapter dbAdapter = new DBAdapter(this);
         if (!UserPreferences.getBoolean(this, App.COPY_DB)) {
             try {

@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,19 +24,21 @@ import android.view.View;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.fragments.BookFragment;
 import org.ajcm.tubiblia.fragments.FavFragment;
 import org.ajcm.tubiblia.fragments.NoteFragment;
 
-import se.emilsjolander.stickylistheaders.BuildConfig;
+import static com.google.android.gms.ads.AdRequest.ERROR_CODE_INTERNAL_ERROR;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private float elevation;
     private String packageName;
+    private InterstitialAd mInterstitialAd;
 
     private AdView adView;
 
@@ -72,6 +75,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 adView.setVisibility(View.VISIBLE);
             }
         });
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_doback));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                finish();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.e(TAG, "onAdLoaded: ");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                Log.e(TAG, "onAdFailedToLoad: " + i);
+            }
+        });
     }
 
     @Override
@@ -82,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_search:
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
                 return true;
@@ -96,7 +122,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -174,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }).show();
     }
 
-    private void clearColorFilter(){
+    private void clearColorFilter() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         for (int i = 0; i < navigationView.getMenu().size(); i++) {
             MenuItem menuItem = navigationView.getMenu().getItem(i);
