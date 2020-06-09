@@ -9,3 +9,5 @@ app/app-release.apk
 /build
 /captures
 /art
+/app/release
+/docs

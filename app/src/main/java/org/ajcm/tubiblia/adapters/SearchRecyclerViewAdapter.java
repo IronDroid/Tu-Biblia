@@ -3,18 +3,13 @@ package org.ajcm.tubiblia.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.ajcm.tubiblia.ColorPalette;
 import org.ajcm.tubiblia.R;
@@ -23,7 +18,6 @@ import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Book;
 import org.ajcm.tubiblia.models.Verse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
@@ -57,7 +51,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         holder.mIdView.setText(book.getNameBook() + " " + holder.mItem.getChapter() + ":" + holder.mItem.getVerse());
 
         String text = mValues.get(position).getText();
-        mValues.get(position).setText(text.replaceAll(filter,"<strong>"+filter+"</strong>"));
+        mValues.get(position).setText(text.replaceAll(filter, "<strong>" + filter + "</strong>"));
         holder.mContentView.setText(Html.fromHtml(mValues.get(position).getText()));
 
 //        SpannableStringBuilder sb = new SpannableStringBuilder(mValues.get(position).getText());

@@ -3,18 +3,15 @@ package org.ajcm.tubiblia.activities;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.ajcm.tubiblia.ColorPalette;
 import org.ajcm.tubiblia.R;
@@ -49,11 +46,11 @@ public class BookActivity extends AppCompatActivity {
         String[] colors = ColorPalette.getColors(this);
         String[] colorsDark = ColorPalette.getColorsDark(this);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        viewPager = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setBackgroundColor(Color.parseColor(colors[idDivider]));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(Color.parseColor(colors[idDivider]));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

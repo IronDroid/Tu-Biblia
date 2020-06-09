@@ -1,15 +1,14 @@
 package org.ajcm.tubiblia.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.TouchDelegate;
 import android.view.View;
@@ -17,6 +16,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.ajcm.tubiblia.ColorPalette;
 import org.ajcm.tubiblia.R;
@@ -59,31 +63,69 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.mIdView.setTextColor(this.color);
         holder.mContentView.setText(verse.getText());
         final boolean hasNote = verse.getTextNote().length() > 0;
-        final PopupMenu popupMenu = new PopupMenu(context, holder.mContentView);
-        popupMenu.inflate(R.menu.menu_verse);
-        setupTouchDelegate(context, holder.mContentView);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        final MenuBuilder menuBuilder = new MenuBuilder(context);
+        MenuInflater inflater = new MenuInflater(context);
+        inflater.inflate(R.menu.menu_verse, menuBuilder);
+        for (int i = 0; i < menuBuilder.size(); i++) {
+            Drawable yourdrawable = menuBuilder.getItem(i).getIcon(); // change 0 with 1,2 ...
+            yourdrawable.mutate();
+            yourdrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        }
+
+        final MenuPopupHelper optionsMenu = new MenuPopupHelper(context, menuBuilder, holder.mContentView);
+        setupTouchDelegate(context, holder.mContentView);
+        optionsMenu.setForceShowIcon(true);
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (verse.isFav()) {
-                    popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
+                    menuBuilder.getRootMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
                 }
-
                 if (hasNote) {
-                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
+                    menuBuilder.getRootMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
                 }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                menuBuilder.setCallback(new MenuBuilder.Callback() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+                    public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                         menuItemClick(item, verse, pos, hasNote);
                         return true;
                     }
+
+                    @Override
+                    public void onMenuModeChange(MenuBuilder menu) {
+                    }
                 });
-                popupMenu.show();
+                optionsMenu.show();
             }
         });
+
+//        final PopupMenu popupMenu = new PopupMenu(context, holder.mContentView);
+//        popupMenu.inflate(R.menu.menu_verse);
+
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (verse.isFav()) {
+//                    popupMenu.getMenu().findItem(R.id.menu_fav).setTitle(R.string.unbookmark);
+//                }
+//
+//                if (hasNote) {
+//                    popupMenu.getMenu().findItem(R.id.menu_note).setTitle(R.string.show_note);
+//                }
+//
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        menuItemClick(item, verse, pos, hasNote);
+//                        return true;
+//                    }
+//                });
+//                popupMenu.show();
+//            }
+//        });
 
         updateUIItem(verse, holder, hasNote);
     }
@@ -103,9 +145,9 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-            layoutMark = (LinearLayout) view.findViewById(R.id.layout_mark);
+            mIdView = view.findViewById(R.id.id);
+            mContentView = view.findViewById(R.id.content);
+            layoutMark = view.findViewById(R.id.layout_mark);
         }
 
         @Override
@@ -115,8 +157,6 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
 
     }
 
-    @SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
     private void menuItemClick(MenuItem item, Verse verse, int pos, boolean hasNote) {
         DBAdapter dbAdapter = new DBAdapter(context);
         switch (item.getItemId()) {
@@ -137,7 +177,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 sharingIntent.setType("text/plain");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Versiculo");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, verse.getText() + "" +
-                        "\n" + book.getNameBook() +" " + verse.getChapter() + ":" + verse.getVerse());
+                        "\n" + book.getNameBook() + " " + verse.getChapter() + ":" + verse.getVerse());
                 context.startActivity(Intent.createChooser(sharingIntent, "Compartir via..."));
                 break;
             case R.id.menu_copy:
@@ -145,12 +185,12 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
                 if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
                     android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context
                             .getSystemService(context.CLIPBOARD_SERVICE);
-                    clipboard.setText(verse.getText() +"\n"+ book.getNameBook()+ " " + verse.getChapter()+ ":" + verse.getVerse());
+                    clipboard.setText(verse.getText() + "\n" + book.getNameBook() + " " + verse.getChapter() + ":" + verse.getVerse());
                 } else {
                     android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
                             .getSystemService(context.CLIPBOARD_SERVICE);
                     android.content.ClipData clip = android.content.ClipData
-                            .newPlainText(context.getResources().getString(R.string.message), verse.getText() +"\n"+ book.getNameBook()+ " " + verse.getChapter()+ ":" + verse.getVerse());
+                            .newPlainText(context.getResources().getString(R.string.message), verse.getText() + "\n" + book.getNameBook() + " " + verse.getChapter() + ":" + verse.getVerse());
                     clipboard.setPrimaryClip(clip);
                 }
                 break;
@@ -165,7 +205,6 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         holder.layoutMark.removeAllViews();
         if (verse.isFav()) {
             View mark = LayoutInflater.from(context).inflate(R.layout.view_mark, null);
-//            mark.setBackgroundColor(context.getResources().getColor(R.color.colorFavMark));
             mark.setBackgroundColor(color);
             holder.layoutMark.addView(mark, params);
         }
@@ -182,7 +221,7 @@ public class CapRecyclerViewAdapter extends RecyclerView.Adapter<CapRecyclerView
         builder.setTitle("Agregar Nota");
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.dialog_note, null);
-        final EditText et = (EditText) layout.findViewById(R.id.edittext_note);
+        final EditText et = layout.findViewById(R.id.edittext_note);
         if (!verse.getTextNote().isEmpty()) {
             et.setText(verse.getTextNote());
         }

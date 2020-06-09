@@ -2,14 +2,15 @@ package org.ajcm.tubiblia.activities;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,6 @@ import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.adapters.SearchRecyclerViewAdapter;
 import org.ajcm.tubiblia.dataset.DBAdapter;
 import org.ajcm.tubiblia.models.Verse;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         searchView.setSubmitButtonEnabled(false);
         searchView.setQueryHint("Buscar una palabra");
         searchView.requestFocus();
-        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
+        ((EditText)searchView.findViewById(androidx.appcompat.R.id.search_src_text))
                 .setHintTextColor(getResources().getColor(android.R.color.white));
         return super.onCreateOptionsMenu(menu);
     }

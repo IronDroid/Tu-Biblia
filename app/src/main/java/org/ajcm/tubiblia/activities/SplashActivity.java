@@ -1,11 +1,9 @@
 package org.ajcm.tubiblia.activities;
 
 import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v4.util.TimeUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.ajcm.tubiblia.R;
 

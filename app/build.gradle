@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "org.ajcm.tubiblia"
-        minSdkVersion 14
-        targetSdkVersion 27
-        versionCode 2
-        versionName "0.5"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 3
+        versionName "0.5.5"
+        multiDexEnabled true
     }
     signingConfigs {
         release {
@@ -29,14 +30,19 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+//    implementation 'com.android.support:support-v4:27.1.1'
+//    implementation 'com.android.support:design:27.1.1'
     implementation 'se.emilsjolander:stickylistheaders:2.7.0'
-    implementation 'com.google.firebase:firebase-ads:12.0.1'
-    implementation 'com.google.firebase:firebase-analytics:12.0.1'
+    implementation 'com.google.firebase:firebase-ads:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -22,6 +22,10 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.BookActivity" />
         <activity android:name=".activities.SearchActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/ads_id" />
     </application>
 
 </manifest>
