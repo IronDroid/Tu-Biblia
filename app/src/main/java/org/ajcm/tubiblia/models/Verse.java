@@ -2,17 +2,29 @@ package org.ajcm.tubiblia.models;
 
 import android.database.Cursor;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 /**
  * Created by jhonlimaster on 09-06-16.
  */
+@Entity(tableName = "verse_table")
 public class Verse {
 
+    @PrimaryKey
+    @ColumnInfo
     private int _id;
+    @ColumnInfo(name = "id_book")
     private int idBook;
     private int chapter;
     private int verse;
+    @ColumnInfo(name = "text_verse")
     private String text;
+    @ColumnInfo(name = "favorite")
     private boolean fav;
+    @ColumnInfo(name = "text_note")
     private String textNote;
 
     public enum Columns {

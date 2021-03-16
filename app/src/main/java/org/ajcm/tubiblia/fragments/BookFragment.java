@@ -1,7 +1,6 @@
 package org.ajcm.tubiblia.fragments;
 
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,6 @@ import androidx.fragment.app.Fragment;
 import org.ajcm.tubiblia.R;
 import org.ajcm.tubiblia.adapters.StickyListAdapter;
 import org.ajcm.tubiblia.dataset.DBAdapter;
-import org.ajcm.tubiblia.models.Book;
-
-import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 

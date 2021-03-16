@@ -2,13 +2,23 @@ package org.ajcm.tubiblia.models;
 
 import android.database.Cursor;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 /**
  * Created by jhonlimaster on 09-06-16.
  */
+@Entity(tableName = "book_table")
 public class Book {
+    @PrimaryKey
+    @ColumnInfo(name = "_id")
     private int idBook;
+    @ColumnInfo(name = "name")
     private String nameBook;
+    @ColumnInfo(name = "num_chapter")
     private int numChapter;
+    @ColumnInfo(name = "id_divider")
     private int idDivider;
 
     public enum Columns {
